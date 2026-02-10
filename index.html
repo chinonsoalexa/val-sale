@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Will You Be My Valentine?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+
+            background:
+                radial-gradient(800px circle at 10% 10%, rgba(255, 77, 109, .25), transparent 60%),
+                radial-gradient(700px circle at 90% 90%, rgba(255, 133, 161, .25), transparent 60%),
+                linear-gradient(135deg, #fff6fa, #ffffff);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: #c9184a;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at center,
+                    transparent 55%,
+                    rgba(0, 0, 0, .18));
+        }
+
+        .container {
+            text-align: center;
+
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+
+            border: 1px solid rgba(255, 255, 255, 0.4);
+
+            padding: 3rem 2.4rem;
+            border-radius: 28px;
+
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.12),
+                0 8px 20px rgba(255, 77, 109, 0.15);
+
+            width: min(92%, 430px);
+
+            animation: floatCard 5s ease-in-out infinite;
+        }
+
+        @keyframes floatCard {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+
+        h1 {
+            font-size: clamp(1.6rem, 4vw, 2.3rem);
+            margin-bottom: 1.2rem;
+            animation: pulse 1.8s infinite;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            border-radius: 999px;
+            padding: 14px 30px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .25s cubic-bezier(.4, 0, .2, 1);
+            min-width: 120px;
+        }
+
+        /* YES */
+        #yes {
+            background: linear-gradient(135deg, #ff4d6d, #ff85a1);
+            color: white;
+
+            box-shadow:
+                0 8px 20px rgba(255, 77, 109, .35),
+                inset 0 -2px 6px rgba(0, 0, 0, .15);
+        }
+
+        #yes:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow:
+                0 14px 30px rgba(255, 77, 109, .5);
+        }
+
+        /* NO */
+        #no {
+            background: rgba(255, 210, 222, .7);
+            backdrop-filter: blur(6px);
+            color: #7a0024;
+        }
+
+        #celebration {
+            display: none;
+        }
+
+        .slideshow {
+            position: relative;
+            overflow: hidden;
+            height: 410px;
+            /* increased from 280px */
+            border-radius: 16px;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .slideshow {
+                height: 510px;
+            }
+        }
+
+        .sparkle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: white;
+            opacity: .8;
+            animation: sparkle 2s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle {
+            from {
+                transform: scale(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 1s ease, transform 1s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            text-align: center;
+            background: #fff0f6;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, .18);
+
+            transform: scale(1.02);
+        }
+
+        .slide {
+            transition: opacity 1.2s ease, transform 1.2s ease;
+        }
+
+        /* 💖 Glowing text */
+        .love-text {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            font-weight: 600;
+            color: #c9184a;
+
+            text-shadow: 0 2px 8px rgba(255, 77, 109, .25);
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 6px rgba(255, 77, 109, 0.4);
+            }
+
+            to {
+                text-shadow: 0 0 16px rgba(255, 77, 109, 1);
+            }
+        }
+
+        /* 💓 Heart pulse behind text */
+        .heart-bg {
+            position: absolute;
+            font-size: 6rem;
+            opacity: 0.15;
+            animation: heartBeat 1.8s infinite;
+            z-index: 1;
+        }
+
+        @keyframes heartBeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        .slide p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            font-weight: 600;
+            color: #c9184a;
+            margin: 0;
+            z-index: 2;
+        }
+
+        .heart {
+            position: fixed;
+            bottom: -40px;
+            font-size: 1.5rem;
+            animation: rise linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes rise {
+            from {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateY(-120vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 8px;
+            height: 14px;
+            top: -20px;
+            animation: confetti-fall linear forwards;
+            z-index: 999;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(120vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="main" class="container">
+        <p>Hey <b>Ella</b>, I have something to ask you 😌</p>
+        <h1>Will you be my Valentine? 💖</h1>
+
+        <div class="buttons">
+            <button id="yes">Yes</button>
+            <button id="no">No</button>
+        </div>
+    </div>
+
+    <div id="celebration" class="container">
+        <div class="slideshow">
+            <div class="slide active">
+                <img src="IMG_5874.png" alt="Romantic">
+                <p>Yay💕 You just made my day, My Angel!</p>
+            </div>
+
+            <div class="slide">
+                <div class="heart-bg">💖</div>
+                <div class="love-text">
+                    Ella My love❤️ <br><br>
+                    You are my peace in chaos, my smile on hard days, and the warmth in my cold nights.
+                    Being with you feels like home, and loving you is the easiest thing my heart has ever known.
+                    Thank you for being you. I’m grateful for you today and always. 💕
+                </div>
+                <p>Forever your Valentine 💘</p>
+            </div>
+        </div>
+    </div>
+
+    <audio id="yesSound" src="HER_-_Best_Part_CeeNaija.com_.mp3" loop></audio>
+
+    <script>
+        const yesBtn = document.getElementById("yes");
+        const noBtn = document.getElementById("no");
+        const main = document.getElementById("main");
+        const celebration = document.getElementById("celebration");
+        const yesSound = document.getElementById("yesSound");
+        const slides = document.querySelectorAll(".slide");
+        const typeText = document.getElementById("typeText");
+
+        let currentSlide = 0;
+        let slideTimer;
+
+
+        /* =================================================
+           YES CLICK → premium reveal sequence
+        ================================================= */
+        yesBtn.addEventListener("click", () => {
+
+            fadeSwitch();
+            fadeInMusic();
+
+            setTimeout(() => {
+                fireworksBurst();   // fireworks once
+                startSlideshow();   // cinematic zoom
+                typeWriter();       // auto typing message
+            }, 700);
+        });
+
+
+        /* =================================================
+           APPLE-STYLE FADE TRANSITION
+        ================================================= */
+        function fadeSwitch() {
+            main.style.transition = "opacity .6s ease";
+            main.style.opacity = "0";
+
+            setTimeout(() => {
+                main.style.display = "none";
+                celebration.style.display = "block";
+                celebration.style.opacity = "0";
+
+                requestAnimationFrame(() => {
+                    celebration.style.transition = "opacity .9s ease";
+                    celebration.style.opacity = "1";
+                });
+            }, 500);
+        }
+
+
+        /* =================================================
+           MUSIC FADE IN
+        ================================================= */
+        function fadeInMusic() {
+            yesSound.volume = 0;
+            yesSound.play();
+
+            let v = 0;
+            const fade = setInterval(() => {
+                v += 0.05;
+                yesSound.volume = v;
+                if (v >= 1) clearInterval(fade);
+            }, 120);
+        }
+
+
+        /* =================================================
+           CINEMATIC ZOOM SLIDESHOW
+        ================================================= */
+        function startSlideshow() {
+
+            slides.forEach(s => {
+                s.style.transition = "opacity 1.2s ease, transform 6s ease";
+            });
+
+            function next() {
+                slides[currentSlide].classList.remove("active");
+
+                currentSlide = (currentSlide + 1) % slides.length;
+
+                const slide = slides[currentSlide];
+                slide.classList.add("active");
+
+                // slow zoom
+                slide.style.transform = "scale(1.08)";
+
+                slideTimer = setTimeout(next, 7000);
+            }
+
+            slides[0].style.transform = "scale(1.08)";
+            slideTimer = setTimeout(next, 7000);
+        }
+
+
+        /* =================================================
+           TYPEWRITER MESSAGE
+        ================================================= */
+        function typeWriter() {
+
+            const message = `Ella ❤️
+
+                You are my calm,
+                my happiness,
+                and the best part of every day.
+
+                Being with you feels like home.
+
+                Forever yours 💕`;
+
+            let i = 0;
+
+            function type() {
+                if (i < message.length) {
+                    typeText.innerHTML += message[i++];
+                    setTimeout(type, 32); // smooth speed
+                }
+            }
+
+            type();
+        }
+
+
+        /* =================================================
+           FIREWORKS BURST (clean, not chaotic)
+        ================================================= */
+        function fireworksBurst() {
+
+            for (let i = 0; i < 14; i++) {
+                setTimeout(() => createFirework(), i * 120);
+            }
+        }
+
+        function createFirework() {
+
+            const colors = ["#ff4d6d", "#ff85a1", "#ffd6e0", "#ffc2d1"];
+
+            for (let i = 0; i < 26; i++) {
+
+                const spark = document.createElement("div");
+
+                const angle = Math.random() * 360;
+                const distance = 80 + Math.random() * 60;
+
+                spark.style.position = "fixed";
+                spark.style.left = "50%";
+                spark.style.top = "50%";
+                spark.style.width = "6px";
+                spark.style.height = "6px";
+                spark.style.borderRadius = "50%";
+                spark.style.background = colors[Math.floor(Math.random() * colors.length)];
+                spark.style.pointerEvents = "none";
+                spark.style.transition = "transform 1s ease-out, opacity 1s ease-out";
+
+                document.body.appendChild(spark);
+
+                requestAnimationFrame(() => {
+                    spark.style.transform =
+                        `translate(${Math.cos(angle) * distance}px,
+                         ${Math.sin(angle) * distance}px)`;
+                    spark.style.opacity = "0";
+                });
+
+                setTimeout(() => spark.remove(), 1000);
+            }
+        }
+
+
+        /* =================================================
+           PARALLAX (subtle premium movement)
+        ================================================= */
+        document.addEventListener("mousemove", (e) => {
+
+            const x = (e.clientX / window.innerWidth - .5) * 10;
+            const y = (e.clientY / window.innerHeight - .5) * 10;
+
+            celebration.style.transform =
+                `translate(${x}px,${y}px)`;
+        });
+
+
+        /* =================================================
+            SMART NO BUTTON (max 5 escapes then disappears)
+        ================================================= */
+
+        let noMoves = 0;
+        const maxMoves = 5;
+
+        noBtn.addEventListener("mouseenter", () => {
+
+            if (noMoves >= maxMoves) return;
+
+            noMoves++;
+
+            // keep movement near center (not too far away)
+            const pad = 40;
+
+            const maxX = window.innerWidth - noBtn.offsetWidth - pad;
+            const maxY = window.innerHeight - noBtn.offsetHeight - pad;
+
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+
+            // blend 70% random + 30% current position for smoother motion
+            const currentX = parseFloat(noBtn.style.left) || window.innerWidth / 2;
+            const currentY = parseFloat(noBtn.style.top) || window.innerHeight / 2;
+
+            const x = currentX * 0.3 + randomX * 0.7;
+            const y = currentY * 0.3 + randomY * 0.7;
+
+            noBtn.style.position = "fixed";
+            noBtn.style.transition = "all .35s cubic-bezier(.4,0,.2,1)";
+            noBtn.style.left = x + "px";
+            noBtn.style.top = y + "px";
+
+            // slight shrink each move
+            let s = parseFloat(noBtn.dataset.s || 1);
+            s *= 0.9;
+            noBtn.dataset.s = s;
+            noBtn.style.transform = `scale(${s})`;
+
+            // after 5th move → fade out smoothly
+            if (noMoves === maxMoves) {
+                setTimeout(() => {
+                    noBtn.textContent = "Yes 💖";
+                    noBtn.id = "yes";
+                    noBtn.style.opacity = "1";
+                    noBtn.style.transform = "scale(1)";
+                    noBtn.onclick = yesBtn.onclick;
+
+                    setTimeout(() => noBtn.remove(), 500);
+                }, 400);
+            }
+        });
+
+        /* -------------------------
+           CONFETTI (lighter + classy)
+        ------------------------- */
+        function launchConfetti() {
+
+            for (let i = 0; i < 70; i++) {  // reduced count
+                const c = document.createElement("div");
+
+                c.className = "confetti";
+                c.style.left = Math.random() * 100 + "vw";
+                c.style.background = `hsl(${Math.random() * 360}, 70%, 65%)`;
+                c.style.animationDuration = 2.5 + Math.random() * 2 + "s";
+
+                document.body.appendChild(c);
+
+                setTimeout(() => c.remove(), 4000);
+            }
+        }
+
+        /* -------------------------
+           FLOATING HEARTS (subtle)
+        ------------------------- */
+        setInterval(() => {
+
+            if (document.hidden) return; // performance friendly
+
+            const heart = document.createElement("div");
+
+            heart.className = "heart";
+            heart.innerText = ["💖", "💕", "❤️", "💞", "💝", "💓", "😍", "🥰", "💖", "❣️", "❤️‍🔥", "💏"][Math.floor(Math.random() * 12)];
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = 5 + Math.random() * 3 + "s";
+
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 8000);
+
+        }, 1200); // slower = classier
+
+    </script>
+
+
+
+</body>
+
+</html>
